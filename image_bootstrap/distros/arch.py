@@ -256,27 +256,8 @@ class ArchStrategy(DistroStrategy):
                 set -x
 
                 pacman --noconfirm --sync binutils fakeroot git patch sudo wget
-
-                COMMIT=adf3e2d5d311903e3a4429d50764b6add2c21e8b
-                SHA256=c29077e9f05bf6bae17b8bb4263d235278388515e6453ffae894be7e25545a40
-
-                wget -Ocommunity-${COMMIT}.tar.xz https://github.com/hartwork/image-bootstrap/files/1670099/community-${COMMIT}.tar.xz.txt
-                sha256sum --check <(echo "${SHA256}  community-${COMMIT}.tar.xz")
-                tar xf community-${COMMIT}.tar.xz
-                chown nobody:nobody community-${COMMIT}/trunk/
-                cd community-${COMMIT}/trunk/
-
-                cp %s .
-                patch PKGBUILD %s
-                pacman --noconfirm --sync \
-                        python2 python2-boto python2-cheetah \
-                        python2-configobj python2-jsonpatch \
-                        python2-jsonpointer python2-oauth \
-                        python2-prettytable python2-requests \
-                        python2-setuptools python2-yaml net-tools
-                sudo -u nobody makepkg
-                pacman --noconfirm --upgrade cloud-init-9999-1-any.pkg.tar.xz
-            """ % (_inner_abs_filename('cloud-init-*.patch'), pkgbuild_patch_basename)))
+                pacman --noconfirm --sync cloud-init
+            """))
             os.fchmod(f.fileno(), 0755)
 
         self._executor.check_call([
